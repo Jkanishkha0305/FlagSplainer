@@ -1,0 +1,24 @@
+strands 
+strands agent 
+
+
+
+agent runtime
+framework
+agent instriction
+agent local tools
+agent context 
+
+mcp
+agentcoregateway 
+
+agentcoregateway
+agent observability 
+
+
+realtimedata 
+agents - strands, langgraph, crew ai, 
+
+
+fin tech 
+retail finance, infra 

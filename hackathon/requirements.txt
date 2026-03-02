@@ -1,0 +1,12 @@
+# Core dependencies for fraud detection system
+openai>=1.12.0
+mcp>=0.9.0
+
+# Optional: LangGraph for workflow orchestration
+langgraph>=0.0.20
+
+# For async support
+asyncio
+
+# Additional utilities
+python-dotenv>=1.0.0
