@@ -1,0 +1,27 @@
+# Environment & secrets
+.env
+*.env
+aws-credentials-setup.md
+claude.json
+
+# macOS junk
+.DS_Store
+._.DS_Store
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Data files
+*.csv
+*.json
+!hackathon/fraud_detection/*.json
+
+# Logs
+*.log
