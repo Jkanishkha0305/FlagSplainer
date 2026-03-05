@@ -1,7 +1,11 @@
 import json
 from typing import Any, Dict, List
 
-import websockets
+try:
+    from websockets.legacy.client import connect as ws_connect
+except ImportError:  # Fallback for older/newer versions
+    from websockets.client import connect as ws_connect  # type: ignore[attr-defined]
+
 from config import (
     LENSES_API_KEY,
     LENSES_API_WEBSOCKET_PORT,
@@ -30,9 +34,11 @@ class LensesWebSocketClient:
         uri = f"{self.base_url}{endpoint}"
 
         try:
-            async with websockets.connect(
-                uri=uri,
-                additional_headers=self.headers
+            header_items = list(self.headers.items())
+
+            async with ws_connect(
+                uri,
+                extra_headers=header_items,
             ) as ws:
                 records = []
                 await ws.send(json.dumps({"sql": sql}))
@@ -50,7 +56,7 @@ class LensesWebSocketClient:
 
                             if not data_:
                                 return
-                            
+
                             records.append(data_)
                             logger.info(f"Record appended: {data_}")
                         case "END":
@@ -59,8 +65,11 @@ class LensesWebSocketClient:
                         case "ERROR":
                             logger.info(f"Error encountered: {data}")
                             return records
+                        case "HEARTBEAT":
+                            # Keep the connection alive without noisy INFO logs.
+                            continue
                         case _:
-                            logger.info(f"Discarding unsupported message type: {message_type}")
+                            logger.debug(f"Discarding unsupported message type: {message_type}")
         except Exception as e:
             logger.error(f"Unhandled error while fetching messages: {e}")
             raise e
